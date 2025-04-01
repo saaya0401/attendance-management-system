@@ -22,7 +22,6 @@ class FortifyServiceProvider extends ServiceProvider
     {
         //
     }
-
     /**
      * Bootstrap any application services.
      */
@@ -30,16 +29,25 @@ class FortifyServiceProvider extends ServiceProvider
     {
         Fortify::createUsersUsing(CreateNewUser::class);
         Fortify::registerView(function () {
-            return view('auth.register');
+            return view('staff.register');
         });
 
         Fortify::loginView(function (){
-            return view('auth.login');
+            return view('staff.login');
         });
 
         RateLimiter::for('login', function (Request $request) {
             $email = (string) $request->email;
             return Limit::perMinute(10)->by($email . $request->ip());
+        });
+
+        Fortify::authenticateUsing(function (Request $request) {
+            $credentials = $request->only('email', 'password');
+            if (Auth::attempt($credentials)) {
+                $user = Auth::user();
+                return redirect()->route($user->role === 'admin' ? 'admin.attendance' : 'attendance');
+            }
+            return null;
         });
     }
 }
