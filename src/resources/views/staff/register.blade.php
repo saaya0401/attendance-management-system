@@ -6,19 +6,15 @@
 
 @section('content')
 <div class="register-form__content">
-    <div class="register-form__heading">
-        <h2>会員登録</h2>
-    </div>
-    <form class="form" method="post" action="{{route('register')}}">
+    <h2 class="register-form__heading">
+        会員登録
+    </h2>
+    <form class="register-form" method="post" action="{{route('register')}}">
         @csrf
         <div class="form__group">
-            <div class="form__group-title">
-                <span class="form__label--item">名前</span>
-            </div>
+            <span class="form__group-title">名前</span>
             <div class="form__group-content">
-                <div class="form__input--text">
-                    <input type="text" name="name" value="{{ old('name') }}" />
-                </div>
+                <input class="form__input--text" type="text" name="name" value="{{ old('name') }}" />
                 <div class="form__error">
                     @error('name')
                     {{ $message }}
@@ -27,13 +23,9 @@
             </div>
         </div>
         <div class="form__group">
-            <div class="form__group-title">
-                <span class="form__label--item">メールアドレス</span>
-            </div>
+            <span class="form__group-title">メールアドレス</span>
             <div class="form__group-content">
-                <div class="form__input--text">
-                    <input type="email" name="email" value="{{ old('email') }}" />
-                </div>
+                <input class="form__input--text" type="email" name="email" value="{{ old('email') }}" />
                 <div class="form__error">
                     @error('email')
                     {{ $message }}
@@ -42,13 +34,9 @@
             </div>
         </div>
         <div class="form__group">
-            <div class="form__group-title">
-                <span class="form__label--item">パスワード</span>
-            </div>
+            <span class="form__group-title">パスワード</span>
             <div class="form__group-content">
-                <div class="form__input--text">
-                    <input type="password" name="password" />
-                </div>
+                <input class="form__input--text" type="password" name="password" />
                 <div class="form__error">
                     @error('password')
                     {{ $message }}
@@ -57,13 +45,9 @@
             </div>
         </div>
         <div class="form__group">
-            <div class="form__group-title">
-                <span class="form__label--item">パスワード確認</span>
-            </div>
+            <span class="form__group-title">パスワード確認</span>
             <div class="form__group-content">
-                <div class="form__input--text">
-                    <input type="password" name="password_confirmation" />
-                </div>
+                <input class="form__input--text" type="password" name="password_confirmation" />
             </div>
         </div>
         <div class="form__button">

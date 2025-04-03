@@ -11,8 +11,9 @@
 <body>
     <header class="header">
         <div class="header-inner">
-            <a href="/attendance" class="header-logo">
-                COACHTECH
+            <a href="/attendance" class="header-link">
+                <img src="{{asset('icon/CTlogo.png')}}" alt="header-logo" class="header-logo">
+                <img src="{{asset('icon/COACHTECH.png')}}" alt="header-logo" class="header-logo">
             </a>
             <nav>
                 <ul class="header-nav">
