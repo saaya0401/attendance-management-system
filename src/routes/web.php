@@ -13,9 +13,12 @@ Route::post('/email/verification-notification', [StaffController::class, 'emailN
 Route::post('/login', [StaffController::class, 'login'])->name('login');
 
 Route::middleware('auth')->group(function (){
-    
     Route::post('/logout', [StaffController::class, 'logout']);
     Route::post('/admin/logout', [AdminController::class, 'logout']);
-    Route::get('/admin/attendance/list', [AdminController::class, 'index'])->name('admin.list');
     Route::get('/attendance', [StaffController::class, 'attendanceView'])->name('attendance');
+    Route::get('/attendance/list', [StaffController::class, 'index'])->name('attendance.list');
+    Route::get('/stamp_correction_request/list', [StaffController::class, 'requestList'])->name('request.list');
+    Route::get('/admin/attendance/list', [AdminController::class, 'index'])->name('admin.list');
+    Route::get('/admin/staff/list', [AdminController::class, 'staffList'])->name('staff.list');
+    Route::get('/admin/stamp_correction_request/list', [AdminController::class, 'requestList'])->name('admin.request.list');
 });

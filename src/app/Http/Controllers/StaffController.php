@@ -54,14 +54,22 @@ class StaffController extends Controller
         return redirect(route('attendance'));
     }
 
-    public function attendanceView(){
-        return view('staff.attendance');
-    }
-
     public function logout(){
         Auth::logout();
         session()->invalidate();
         session()->regenerateToken();
         return redirect('/login');
+    }
+
+    public function attendanceView(){
+        return view('staff.attendance');
+    }
+
+    public function index(){
+        return view('staff.attendance_list');
+    }
+
+    public function requestList(){
+        return view('staff.request_list');
     }
 }
