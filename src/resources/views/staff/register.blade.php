@@ -9,7 +9,7 @@
     <h2 class="register-form__heading">
         会員登録
     </h2>
-    <form class="register-form" method="post" action="{{route('register')}}">
+    <form class="register-form" method="post" action="{{route('register')}}" novalidate>
         @csrf
         <div class="form__group">
             <span class="form__group-title">名前</span>
@@ -48,6 +48,11 @@
             <span class="form__group-title">パスワード確認</span>
             <div class="form__group-content">
                 <input class="form__input--text" type="password" name="password_confirmation" />
+                <div class="form__error">
+                    @error('password_confirmation')
+                    {{ $message }}
+                    @enderror
+                </div>
             </div>
         </div>
         <div class="form__button">

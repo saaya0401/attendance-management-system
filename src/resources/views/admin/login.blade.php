@@ -9,7 +9,7 @@
     <h2 class="login-form__heading">
         管理者ログイン
     </h2>
-    <form class="login-form" action="{{route('admin.login')}}" method="post">
+    <form class="login-form" action="{{route('admin.login')}}" method="post" novalidate>
         @csrf
         <div class="form__group">
             <span class="form__group-title">メールアドレス</span>
