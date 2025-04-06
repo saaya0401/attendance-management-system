@@ -47,6 +47,13 @@
     font-weight: 700 ;
 }
 
+.form__error {
+    color: #ff0000;
+    text-align: left;
+    padding-top: 10px;
+    font-size: 22px;
+}
+
 .register__button-submit {
     color: #0073CC;
     text-decoration: none;

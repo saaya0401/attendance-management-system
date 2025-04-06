@@ -9,7 +9,7 @@
     <h2 class="login-form__heading">
         ログイン
     </h2>
-    <form class="login-form" method="post" action="{{route('login')}}">
+    <form class="login-form" method="post" action="{{route('login')}}" novalidate>
         @csrf
         <div class="form__group">
             <span class="form__group-title">メールアドレス</span>

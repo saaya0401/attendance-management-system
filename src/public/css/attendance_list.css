@@ -1,0 +1,8 @@
+.header-nav__button {
+    cursor: pointer;
+    color: #fff;
+    background-color: inherit;
+    border: none;
+    font-size: 24px;
+    font-weight: 700;
+}

@@ -53,6 +53,13 @@
     font-size: 20px;
 }
 
+.form__error {
+    color: #ff0000;
+    text-align: left;
+    padding-top: 10px;
+    font-size: 22px;
+}
+
 @media screen and (max-width:850px) {
     .register-form__content {
         width: 70%;
