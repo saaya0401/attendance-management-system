@@ -20,6 +20,8 @@
 .attendance-date {
     margin: 25px 0 0;
     font-size: 40px;
+    border: none;
+    text-align: center;
 }
 
 .attendance-time {
@@ -37,4 +39,37 @@
     font-weight: 700;
     padding: 15px 78px;
     cursor: pointer;
+}
+
+.attendance-status {
+    display: block;
+    text-align: center;
+    border: none;
+}
+
+.attendance-form {
+    text-align: center;
+    width: 35%;
+}
+
+.attendance-button__group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.attendance-button__break {
+    background-color: #fff;
+    border: none;
+    border-radius: 20px;
+    font-size: 32px;
+    font-weight: 700;
+    padding: 15px 62px;
+    cursor: pointer;
+}
+
+@media screen and (max-width:850px) {
+    .attendance-form {
+        width: 70%;
+    }
 }

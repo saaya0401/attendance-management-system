@@ -29,7 +29,7 @@
                         </form>
                     </li>
                     <li class="header-nav__item">
-                        <form action="{{route('request.list')}}" class="header-form" method="get">
+                        <form action="{{ auth()->user()->role === 'admin' ? route('admin.request.list') : route('request.list') }}" method="get">
                             <button class="header-nav__button">申請</button>
                         </form>
                     </li>
