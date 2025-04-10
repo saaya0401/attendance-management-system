@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Request;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
+use App\Models\AttendanceLog;
 
 class StaffController extends Controller
 {
@@ -62,11 +64,43 @@ class StaffController extends Controller
     }
 
     public function attendanceView(){
-        return view('staff.attendance');
+        $user=Auth::user();
+        $today=Carbon::today();
+        $attendanceLog=AttendanceLog::where('user_id', $user->id)->whereDate('date', $today)->orderBy('created_at', 'desc')->first();
+        $attendanceStatus='勤務外';
+        $attendanceDate=$today->format('Y年m月d日(D)');
+        $attendanceTime=Carbon::now()->format('H:i');
+
+        if($attendanceLog){
+            switch($attendanceLog->attendance_status){
+                case 'clock_in':
+                    $attendanceStatus='出勤中';
+                    break;
+                case 'break_out':
+                    $attendanceStatus='出勤中';
+                    break;
+                case 'break_in':
+                    $attendanceStatus='休憩中';
+                    break;
+                case 'clock_out':
+                    $attendanceStatus='退勤済';
+                    break;
+            }
+        }
+        return view('staff.attendance', compact('attendanceLog','attendanceStatus', 'attendanceDate', 'attendanceTime'));
+    }
+
+    public function clockIn(Request $request){
+        $attendanceData=$request->only(['attendance_status', 'date', 'time'] );
+        $attendanceData['user_id']=Auth::id();
+        $attendanceLog=AttendanceLog::create($attendanceData);
+        $attendanceAllLog=AttendanceLog::all();
+        return redirect()->route('attendance.list');
     }
 
     public function index(){
-        return view('staff.attendance_list');
+        $attendanceAllLog = AttendanceLog::orderBy('created_at', 'desc')->get();
+        return view('staff.attendance_list', compact('attendanceAllLog'));
     }
 
     public function requestList(){

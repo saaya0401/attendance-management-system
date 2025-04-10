@@ -16,9 +16,15 @@ Route::middleware('auth')->group(function (){
     Route::post('/logout', [StaffController::class, 'logout']);
     Route::post('/admin/logout', [AdminController::class, 'logout']);
     Route::get('/attendance', [StaffController::class, 'attendanceView'])->name('attendance');
+    Route::post('/attendance/clock_in', [StaffController::class, 'clockIn'])->name('clock.in');
+    Route::post('/attendance/clock_out', [StaffController::class, 'clockOut'])->name('clock.out');
+    Route::post('/attendance/break_in', [StaffController::class, 'breakIn'])->name('break.in');
+    Route::post('/attendance/break_out', [StaffController::class, 'breakOut'])->name('break.out');
     Route::get('/attendance/list', [StaffController::class, 'index'])->name('attendance.list');
-    Route::get('/stamp_correction_request/list', [StaffController::class, 'requestList'])->name('request.list');
+    Route::get('/stamp_correction_request/list', function () {
+        $controller= auth()->user()->role === 'admin' ? \App\Http\Controllers\AdminController::class : \App\Http\Controllers\StaffController::class;
+        return app($controller)->requestList();
+    })->name('request.list');
     Route::get('/admin/attendance/list', [AdminController::class, 'index'])->name('admin.list');
     Route::get('/admin/staff/list', [AdminController::class, 'staffList'])->name('staff.list');
-    Route::get('/admin/stamp_correction_request/list', [AdminController::class, 'requestList'])->name('admin.request.list');
 });
