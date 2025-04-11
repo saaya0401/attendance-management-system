@@ -99,8 +99,7 @@ class StaffController extends Controller
     }
 
     public function index(){
-        $attendanceAllLog = AttendanceLog::orderBy('created_at', 'desc')->get();
-        return view('staff.attendance_list', compact('attendanceAllLog'));
+        return view('staff.attendance_list');
     }
 
     public function requestList(){
