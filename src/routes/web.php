@@ -16,10 +16,7 @@ Route::middleware('auth')->group(function (){
     Route::post('/logout', [StaffController::class, 'logout']);
     Route::post('/admin/logout', [AdminController::class, 'logout']);
     Route::get('/attendance', [StaffController::class, 'attendanceView'])->name('attendance');
-    Route::post('/attendance/clock_in', [StaffController::class, 'clockIn'])->name('clock.in');
-    Route::post('/attendance/clock_out', [StaffController::class, 'clockOut'])->name('clock.out');
-    Route::post('/attendance/break_in', [StaffController::class, 'breakIn'])->name('break.in');
-    Route::post('/attendance/break_out', [StaffController::class, 'breakOut'])->name('break.out');
+    Route::post('/attendance', [StaffController::class, 'attendance'])->name('attendance');
     Route::get('/attendance/list', [StaffController::class, 'index'])->name('attendance.list');
     Route::get('/stamp_correction_request/list', function () {
         $controller= auth()->user()->role === 'admin' ? \App\Http\Controllers\AdminController::class : \App\Http\Controllers\StaffController::class;

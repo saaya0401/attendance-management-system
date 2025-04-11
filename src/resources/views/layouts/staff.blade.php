@@ -18,27 +18,13 @@
             <nav>
                 <ul class="header-nav">
                     @if(Auth::check())
-                    <li class="header-nav__item">
-                        <form action="{{route('attendance')}}" class="header-form" method="get">
-                            <button class="header-nav__button">勤怠</button>
-                        </form>
-                    </li>
-                    <li class="header-nav__item">
-                        <form action="{{route('attendance.list')}}" class="header-form" method="get">
-                            <button class="header-nav__button">勤怠一覧</button>
-                        </form>
-                    </li>
-                    <li class="header-nav__item">
-                        <form action="{{ auth()->user()->role === 'admin' ? route('admin.request.list') : route('request.list') }}" method="get">
-                            <button class="header-nav__button">申請</button>
-                        </form>
-                    </li>
-                    <li class="header-nav__item">
-                        <form class="header-form" action="/logout" method="post">
-                        @csrf
-                            <button class="header-nav__button">ログアウト</button>
-                        </form>
-                    </li>
+                        @yield('nav')
+                        <li class="header-nav__item">
+                            <form class="header-form" action="/logout" method="post">
+                            @csrf
+                                <button class="header-nav__button">ログアウト</button>
+                            </form>
+                        </li>
                     @endif
                 </ul>
             </nav>
