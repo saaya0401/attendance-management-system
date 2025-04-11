@@ -68,7 +68,8 @@ class StaffController extends Controller
         $today=Carbon::today();
         $attendanceLog=AttendanceLog::where('user_id', $user->id)->whereDate('date', $today)->orderBy('created_at', 'desc')->first();
         $attendanceStatus='勤務外';
-        $attendanceDate=$today->format('Y年m月d日(D)');
+        $weekdays = ['日', '月', '火', '水', '木', '金', '土'];
+        $attendanceDate = $today->year . '年' . $today->month . '月' . $today->day . '日(' . $weekdays[$today->dayOfWeek] . ')';
         $attendanceTime=Carbon::now()->format('H:i');
 
         if($attendanceLog){
@@ -90,12 +91,11 @@ class StaffController extends Controller
         return view('staff.attendance', compact('attendanceLog','attendanceStatus', 'attendanceDate', 'attendanceTime'));
     }
 
-    public function clockIn(Request $request){
+    public function attendance(Request $request){
         $attendanceData=$request->only(['attendance_status', 'date', 'time'] );
         $attendanceData['user_id']=Auth::id();
         $attendanceLog=AttendanceLog::create($attendanceData);
-        $attendanceAllLog=AttendanceLog::all();
-        return redirect()->route('attendance.list');
+        return redirect()->route('attendance');
     }
 
     public function index(){
