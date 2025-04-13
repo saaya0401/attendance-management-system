@@ -102,6 +102,9 @@ class StaffController extends Controller
         return view('staff.attendance_list');
     }
 
+    public function detail($id){
+        
+    }
     public function requestList(){
         return view('staff.request_list');
     }

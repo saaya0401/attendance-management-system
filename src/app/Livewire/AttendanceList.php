@@ -24,60 +24,67 @@ class AttendanceList extends Component
         $startOfMonth=Carbon::createFromFormat('Y-m', $selectedMonth)->startOfMonth();
         $endOfMonth=Carbon::createFromFormat('Y-m', $selectedMonth)->endOfMonth();
 
-        $logs=AttendanceLog::where('user_id', Auth::id())
+        $rawlogs=AttendanceLog::where('user_id', Auth::id())
             ->whereBetween('date', [$startOfMonth, $endOfMonth])
             ->orderBy('date')
             ->orderBy('time')
             ->get()
-            ->groupBy('date')
-            ->map(function (Collection $dayLogs, $date) {
-                $clockIn=$dayLogs->firstWhere('attendance_status', 'clock_in');
-                $clockOut=$dayLogs->firstWhere('attendance_status', 'clock_out');
+            ->groupBy('date');
 
-                $breaks=$dayLogs->filter(fn($log)=>in_array($log->attendance_status, ['break_out', 'break_in']))->values();
-                $totalBreak=0;
+        $weekdays = ['日', '月', '火', '水', '木', '金', '土'];
+        $results=collect();
 
-                for($i = 0; $i< $breaks->count(); $i += 2){
-                    if(isset($breaks[$i + 1])) {
-                        $start=Carbon::parse($breaks[$i]->time);
-                        $end=Carbon::parse($breaks[$i + 1]->time);
-                        $totalBreak += $start->diffInMinutes($end);
-                    }
+        for ($date=$startOfMonth->copy(); $date->lte($endOfMonth); $date->addDay()) {
+            $carbonDate=$date->copy();
+            $formattedDate=$carbonDate->format('Y-m-d');
+            $dayLogs=$rawlogs->get($formattedDate, collect());
+            $clockIn=$dayLogs->firstWhere('attendance_status', 'clock_in');
+            $clockOut=$dayLogs->firstWhere('attendance_status', 'clock_out');
+
+            $breaks=$dayLogs->filter(fn($log)=>in_array($log->attendance_status, ['break_out', 'break_in']))->values();
+            $totalBreak=0;
+
+            for($i = 0; $i< $breaks->count(); $i += 2){
+                if(isset($breaks[$i + 1])) {
+                    $start=Carbon::parse($breaks[$i]->time);
+                    $end=Carbon::parse($breaks[$i + 1]->time);
+                    $totalBreak += $start->diffInMinutes($end);
                 }
+            }
 
-                $total=null;
-                if($clockIn && $clockOut) {
-                    $start=Carbon::parse($clockIn->time);
-                    $end=Carbon::parse($clockOut->time);
-                    $total=$start->diffInMinutes($end) - $totalBreak;
-                }
+            $total=null;
+            if($clockIn && $clockOut) {
+                $start=Carbon::parse($clockIn->time);
+                $end=Carbon::parse($clockOut->time);
+                $total=$start->diffInMinutes($end) - $totalBreak;
+            }
 
-                $weekdays = ['日', '月', '火', '水', '木', '金', '土'];
-                $carbonDate=Carbon::parse($date);
+            $breakHours=floor($totalBreak / 60);
+            $breakMinutes =$totalBreak % 60;
+            $breakDisplay = str_pad($breakHours, 2, '0', STR_PAD_LEFT) . ':' . str_pad($breakMinutes, 2, '0', STR_PAD_LEFT);
 
-                $breakHours=floor($totalBreak / 60);
-                $breakMinutes =$totalBreak % 60;
-                $breakDisplay = str_pad($breakHours, 2, '0', STR_PAD_LEFT) . ':' . str_pad($breakMinutes, 2, '0', STR_PAD_LEFT);
+            $totalDisplay='';
+            if($total !== null){
+                $totalHours=floor($total / 60);
+                $totalMinutes=$total % 60;
+                $totalDisplay = str_pad($totalHours, 2, '0', STR_PAD_LEFT) . ':' . str_pad($totalMinutes, 2, '0', STR_PAD_LEFT);
+            }
 
-                $totalDisplay='';
-                if($total !== null){
-                    $totalHours=floor($total / 60);
-                    $totalMinutes=$total % 60;
-                    $totalDisplay = str_pad($totalHours, 2, '0', STR_PAD_LEFT) . ':' . str_pad($totalMinutes, 2, '0', STR_PAD_LEFT);
-                }
-                return [
-                    'date'=>$carbonDate->format('m/d') . '(' . $weekdays[$carbonDate->dayOfWeek] . ')',
-                    'clock_in'=>$clockIn?->time ? Carbon::parse($clockIn->time)->format('H:i') : '',
-                    'clock_out'=>$clockOut?->time ? Carbon::parse($clockOut->time)->format('H:i') : '',
-                    'break'=>$breakDisplay,
-                    'total'=>$totalDisplay,
-                ];
-            });
+            $results->push([
+                'date'=>$carbonDate->format('m/d') . '(' . $weekdays[$carbonDate->dayOfWeek] . ')',
+                'id' => $clockIn?->id,
+                'clock_in'=>$clockIn?->time ? Carbon::parse($clockIn->time)->format('H:i') : '',
+                'clock_out'=>$clockOut?->time ? Carbon::parse($clockOut->time)->format('H:i') : '',
+                'break'=>$breaks->isNotEmpty() ? $breakDisplay : '',
+                'total'=>$totalDisplay,
+            ]);
+        }
+
         $current=Carbon::createFromFormat('Y-m', $this->selectedMonth);
         $prevMonth=$current->copy()->subMonth()->format('Y-m');
         $nextMonth=$current->copy()->addMonth()->format('Y-m');
         return view('livewire.attendance-list', [
-            'attendanceLogs'=>$logs,
+            'attendanceLogs'=>$results,
             'prevMonth'=>$prevMonth,
             'nextMonth'=>$nextMonth
         ]);

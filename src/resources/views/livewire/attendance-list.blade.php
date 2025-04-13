@@ -33,9 +33,12 @@
             <td class="attendance-table__data">{{ $log['break'] }}</td>
             <td class="attendance-table__data">{{ $log['total'] }}</td>
             <td class="attendance-table__detail">
-                <a href="" class="attendance-table__detail-link">詳細</a>
+                @if($log['total'])
+                <a href="{{ route('detail', ['id'=>$log['id']]) }}" class="attendance-table__detail-link">詳細</a>
+                @endif
             </td>
         </tr>
         @endforeach
     </table>
+    <div class="footer-space"></div>
 </div>
