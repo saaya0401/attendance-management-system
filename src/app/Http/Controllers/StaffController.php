@@ -103,7 +103,8 @@ class StaffController extends Controller
     }
 
     public function detail($id){
-        
+        $id=AttendanceLog::find($id);
+        return view('staff.attendance_detail');
     }
     public function requestList(){
         return view('staff.request_list');
