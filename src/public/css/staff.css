@@ -42,6 +42,14 @@ nav {
     width: 35%;
 }
 
+.alert-success {
+    background-color: rgb(220, 255, 237);
+    padding: 10px 100px;
+    color: rgb(0, 85, 0);
+    font-weight: 700;
+    font-size: 20px;
+}
+
 .main {
     flex: 1;
     overflow-y: auto;

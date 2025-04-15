@@ -33,7 +33,7 @@
             <td class="attendance-table__data">{{ $log['break'] }}</td>
             <td class="attendance-table__data">{{ $log['total'] }}</td>
             <td class="attendance-table__detail">
-                @if($log['total'])
+                @if($log['clock_in'])
                 <a href="{{ route('detail', ['id'=>$log['id']]) }}" class="attendance-table__detail-link">詳細</a>
                 @endif
             </td>

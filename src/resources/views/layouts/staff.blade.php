@@ -30,6 +30,11 @@
             </nav>
         </div>
     </header>
+    @if (session('message'))
+    <div class="alert-success">
+        {{ session('message') }}
+    </div>
+    @endif
     <main class="main">
         @yield('content')
     </main>
