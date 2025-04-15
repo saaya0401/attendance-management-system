@@ -39,10 +39,6 @@
     text-align: left;
     font-weight: 700;
     padding: 10px 0;
-    width: 55%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
 }
 
 .detail-table__data {
@@ -52,19 +48,47 @@
 
 .detail-table__description {
     text-align: left;
-    font-weight: 700;
+    padding: 31px 0;
+}
+
+.detail-table__input-area {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 31px 0;
     width: 55%;
+    font-weight: 700;
+}
+
+
+.form-error {
+    color: #ff0000;
+    padding-top: 10px;
 }
 
 .detail-table__time {
     font-weight: 700;
     border: 1px solid #E1E1E1;
     border-radius: 4px;
-    padding: 2px 26px;
+    text-align: center;
+    width: 103px;
+    padding: 2px 0;
+    height: 30px;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+.detail-table__time::-webkit-calendar-picker-indicator {
+    z-index: 10;
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    width: auto;
+    height: auto;
 }
 
 .detail-table__between {
@@ -74,13 +98,19 @@
 .detail-textarea {
     border: 1px solid #D9D9D9;
     border-radius: 4px;
-    padding: 8px 15px;
-    width: 100%;
+    padding: 8px 26px;
+    width: 55%;
     height: 72px;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 700;
 }
 
+.detail-table__readonly {
+    border: none;
+    outline: none;
+    pointer-events: none;
+    resize: none;
+}
 
 .detail-form__button {
     width: 100%;
@@ -100,6 +130,22 @@
     padding: 7px 0;
 }
 
+.detail-notion {
+    width: 100%;
+    display: flex;
+    justify-content: right;
+}
+
+.detail__pending {
+    color:#FF000080;
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.footer-area {
+    height: 30px;
+}
+
 @media screen and (max-width:850px) {
     .detail-form {
         margin-top: 70px;
@@ -110,7 +156,7 @@
         height: 85%;
     }
 
-    .detail-table__description {
+    .detail-table__input-area {
         width: 80%;
     }
 

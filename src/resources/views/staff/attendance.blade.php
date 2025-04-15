@@ -35,11 +35,6 @@
     @endif
 @endsection
 @section('content')
-@if (session('message'))
-    <div class="alert-success">
-        {{ session('message') }}
-    </div>
-@endif
 <form class="attendance-form" method="post">
     @csrf
     <h6 class="attendance-status">{{$attendanceStatus}}</h6>
