@@ -49,9 +49,9 @@
                 <th class="detail-table__header">出勤・退勤</th>
                 <td class="detail-table__description">
                     <div class="detail-table__input-area">
-                        <input type="time" name="clock_in" value="{{ $clockInTime }}" placeholder="{{ $clockInTime }}" class="detail-table__time {{ $hasPendingRequest ? 'detail-table__readonly' : '' }}" {{ $hasPendingRequest ? 'readonly' : '' }}>
+                        <input type="time" name="clock_in" value="{{ old('clock_in', $clockInTime) }}" placeholder="{{ $clockInTime }}" class="detail-table__time {{ $hasPendingRequest ? 'detail-table__readonly' : '' }}" {{ $hasPendingRequest ? 'readonly' : '' }}>
                         <span class="detail-table__between">〜</span>
-                        <input type="time" name="clock_out" value="{{ $clockOutTime }}" placeholder="{{ $clockOutTime }}" class="detail-table__time {{ $hasPendingRequest ? 'detail-table__readonly' : '' }}" {{ $hasPendingRequest ? 'readonly' : '' }}>
+                        <input type="time" name="clock_out" value="{{ old('clock_out', $clockOutTime) }}" placeholder="{{ $clockOutTime }}" class="detail-table__time {{ $hasPendingRequest ? 'detail-table__readonly' : '' }}" {{ $hasPendingRequest ? 'readonly' : '' }}>
                     </div>
                     @error('clock_in')
                     <div class="form-error">{{ $message }}</div>

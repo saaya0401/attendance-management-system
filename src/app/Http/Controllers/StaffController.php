@@ -195,7 +195,18 @@ class StaffController extends Controller
 
         return redirect()->route('detail', ['id'=>$id])->with('message', '勤怠修正を申請しました');
     }
-    public function requestList(){
-        return view('staff.request_list');
+    public function requestList(Request $request){
+        $userId=Auth::id();
+        $tab=$request->query('tab');
+        if($tab === 'approved'){
+            $attendanceRequests=AttendanceRequest::where('user_id', $userId)->where('approval_status', 'approved')->orderBy('date')->get();
+        }else{
+            $attendanceRequests=AttendanceRequest::where('user_id', $userId)->where('approval_status', 'pending')->orderBy('date')->get();
+        }
+        foreach($attendanceRequests as $attendanceRequest){
+            $log=AttendanceLog::where('user_id', $userId)->where('date', $attendanceRequest->date)->where('attendance_status', 'clock_in')->first();
+            $attendanceRequest->detail_id=$log->id;
+        }
+        return view('staff.request_list', compact('tab', 'attendanceRequests'));
     }
 }
