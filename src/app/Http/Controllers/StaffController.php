@@ -105,6 +105,7 @@ class StaffController extends Controller
     }
 
     public function detail($id){
+        $layout=Auth::user()->role === 'admin' ? 'layouts.admin' : 'layouts.staff';
         $clockInLog=AttendanceLog::find($id);
         $carbonDate = Carbon::parse($clockInLog['date']);
         $formattedYear = $carbonDate->format('Y年');
@@ -160,7 +161,7 @@ class StaffController extends Controller
             $hasPendingRequest = false;
         }
 
-        return view('staff.attendance_detail', compact('clockInLog', 'date', 'clockInTime', 'clockOutTime', 'breaks', 'formattedYear', 'formattedDate', 'hasPendingRequest', 'attendanceRequest'));
+        return view('staff.attendance_detail', compact('layout', 'clockInLog', 'date', 'clockInTime', 'clockOutTime', 'breaks', 'formattedYear', 'formattedDate', 'hasPendingRequest', 'attendanceRequest'));
     }
 
     public function edit(AttendanceEditRequest $request, $id){

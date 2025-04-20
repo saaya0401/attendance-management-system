@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{{asset('css/sanitize.css')}}">
     <link rel="stylesheet" href="{{asset('css/staff.css')}}">
     @yield('css')
+    @livewireStyles
 </head>
 <body>
     <header class="header">
@@ -38,5 +39,6 @@
     <main class="main">
         @yield('content')
     </main>
+    @livewireScripts
 </body>
 </html>
