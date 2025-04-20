@@ -30,7 +30,7 @@
                         </form>
                     </li>
                     <li class="header-nav__item">
-                        <form action="{{route('admin.request.list')}}" class="header-form" method="get">
+                        <form action="{{route('request.list')}}" class="header-form" method="get">
                             <button class="header-nav__button">申請一覧</button>
                         </form>
                     </li>
