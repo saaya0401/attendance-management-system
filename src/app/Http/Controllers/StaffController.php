@@ -114,7 +114,7 @@ class StaffController extends Controller
 
         $date=$clockInLog['date'];
         $userId=$clockInLog['user_id'];
-        $hasPendingRequest=AttendanceRequest::where('user_id', $userId)->where('date', $date)->exists();
+        $hasApprovedRequest=AttendanceRequest::where('user_id', $userId)->where('date', $date)->where('approval_status', 'pending')->doesntExist();
         $dateLogs=AttendanceLog::where('date', $date)->where('user_id', $userId)->orderBy('time')->get();
 
         $clockOutTime=null;
@@ -161,7 +161,7 @@ class StaffController extends Controller
             $hasPendingRequest = false;
         }
 
-        return view('staff.attendance_detail', compact('layout', 'clockInLog', 'date', 'clockInTime', 'clockOutTime', 'breaks', 'formattedYear', 'formattedDate', 'hasPendingRequest', 'attendanceRequest'));
+        return view('staff.attendance_detail', compact('layout', 'clockInLog', 'date', 'clockInTime', 'clockOutTime', 'breaks', 'formattedYear', 'formattedDate', 'hasApprovedRequest', 'attendanceRequest'));
     }
 
     public function edit(AttendanceEditRequest $request, $id){
@@ -187,15 +187,56 @@ class StaffController extends Controller
             }
         }
 
-        AttendanceRequest::create([
+        $attendanceRequest=AttendanceRequest::create([
             'user_id'=>$userId,
             'date'=>$date,
             'comment'=>$comment,
             'request_changes'=>json_encode($changes)
         ]);
 
+        if($changes['clock_in']){
+            AttendanceLog::where([
+                'user_id'=>$userId,
+                'date'=>$date,
+                'attendance_status'=>'clock_in',
+            ])->update([
+                'attendance_request_id'=>$attendanceRequest->id
+            ]);
+        }
+
+        if($changes['clock_out']){
+            AttendanceLog::where([
+                'user_id'=>$userId,
+                'date'=>$date,
+                'attendance_status'=>'clock_out',
+            ])->update([
+                'attendance_request_id'=>$attendanceRequest->id
+            ]);
+        }
+
+        foreach($changes['breaks'] as $i=>$break){
+            if($break['start']){
+                AttendanceLog::where([
+                    'user_id'=>$userId,
+                    'date'=>$date,
+                    'attendance_status'=>'break_in',
+                ])->update([
+                    'attendance_request_id'=>$attendanceRequest->id
+                ]);
+            }
+            if($break['end']){
+                AttendanceLog::where([
+                    'user_id'=>$userId,
+                    'date'=>$date,
+                    'attendance_status'=>'break_out',
+                ])->update([
+                    'attendance_request_id'=>$attendanceRequest->id
+                ]);
+            }
+        }
         return redirect()->route('detail', ['id'=>$id])->with('message', '勤怠修正を申請しました');
     }
+
     public function requestList(Request $request){
         $userId=Auth::id();
         $tab=$request->query('tab');
