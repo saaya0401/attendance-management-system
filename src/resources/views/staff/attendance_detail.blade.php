@@ -23,7 +23,6 @@
 @endsection
 
 @section('content')
-
 <div class="content">
     <h1 class="detail-title">勤怠詳細</h1>
     <form class="detail-form" method="post">

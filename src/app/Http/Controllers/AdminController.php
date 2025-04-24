@@ -9,6 +9,7 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Requests\AttendanceEditRequest;
 use App\Models\AttendanceLog;
 use App\Models\AttendanceRequest;
+use App\Models\User;
 
 class AdminController extends Controller
 {
@@ -147,5 +148,15 @@ class AdminController extends Controller
             }
         }
         return redirect()->route('detail', ['id'=>$id])->with('message', '勤怠を修正しました');
+    }
+
+    public function staffList(){
+        $users=User::where('role', 'staff')->get();
+        return view('admin.staff_list', compact('users'));
+    }
+
+    public function staffAttendanceList($id){
+        $user=User::find($id)->first();
+        return view('admin.staff_attendance_list', compact('user'));
     }
 }
