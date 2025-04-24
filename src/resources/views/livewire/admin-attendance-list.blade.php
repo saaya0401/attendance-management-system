@@ -1,5 +1,5 @@
 <div class="content">
-    <h1 class="list-title">{{ $formattedSelectedDay }}</h1>]
+    <h1 class="list-title">{{ $formattedSelectedDay }}</h1>
     <div class="date-select">
         <button class="day-button" wire:click="$set('selectedDay', '{{ $prevDay }}')">
             <img src="{{ asset('icon/left.png') }}" alt="矢印" class="day-image">
