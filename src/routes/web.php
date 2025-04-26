@@ -25,6 +25,7 @@ Route::middleware('auth')->group(function (){
     })->name('request.list');
     Route::get('/admin/attendance/list', [AdminController::class, 'index'])->name('admin.list');
     Route::get('/admin/staff/list', [AdminController::class, 'staffList'])->name('staff.list');
+    Route::post('/export', [AdminController::class, 'export']);
     Route::get('/admin/attendance/staff/{id}', [AdminController::class, 'staffAttendanceList'])->name('staff.attendance');
     Route::get('/attendance/{id}', [StaffController::class, 'detail'])->name('detail');
     Route::post('/attendance/{id}', [StaffController::class, 'edit'])->name('detail.edit');
