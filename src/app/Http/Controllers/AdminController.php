@@ -156,7 +156,39 @@ class AdminController extends Controller
     }
 
     public function staffAttendanceList($id){
-        $user=User::find($id)->first();
+        $user=User::find($id);
         return view('admin.staff_attendance_list', compact('user'));
+    }
+
+    public function export(Request $request){
+        $logs=$request->input('logs', []);
+        $csvData=[];
+        $csvData[]=[
+            '日付', '出勤', '退勤', '休憩', '合計'
+        ];
+        foreach($logs as $log){
+            $csvData[]=[
+                $log['date'] ?? '',
+                $log['clock_in'] ?? '',
+                $log['clock_out'] ?? '',
+                $log['break'] ?? '',
+                $log['total'] ?? '',
+            ];
+        }
+
+        $month=$request->input('month');
+        $monthFormatted=\Carbon\Carbon::createFromFormat('Y/m', $month)->format('Y年m月');
+        $userName=$request->input('user_name');
+        $filename=$userName . 'さんの' . $monthFormatted . 'の勤怠.csv';
+
+        return response()->streamDownload(function () use ($csvData){
+            $file=fopen('php://output', 'w');
+            foreach($csvData as $row){
+                fputcsv($file, $row);
+            }
+            fclose($file);
+        }, $filename, [
+            'Content-Type'=>'text/csv',
+        ]);
     }
 }
