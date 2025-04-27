@@ -1,0 +1,174 @@
+.content {
+    width: 65%;
+    height: 85%;
+}
+
+.detail-title {
+    text-align: left;
+    margin: 0;
+    border-left: 8px solid #000;
+    padding-left: 20px;
+    font-size: 30px;
+    font-weight: 700;
+}
+
+.detail-form {
+    margin-top: 70px;
+}
+
+.detail-table {
+    width: 100%;
+    background-color: #fff;
+    border: 1px solid #E1E1E1;
+    border-radius: 10px;
+}
+
+.detail-table__row {
+    border-bottom: 2px solid #E1E1E1;
+}
+
+.detail-table__header {
+    width: 40%;
+    text-align: left;
+    padding: 30px 60px;
+    font-weight: 700;
+    color: #737373;
+}
+
+.detail-table__description-comment {
+    text-align: left;
+    font-weight: 700;
+    padding: 10px 0;
+}
+
+.detail-table__data {
+    font-weight: 700;
+    padding: 2px 26px;
+}
+
+.detail-table__description {
+    text-align: left;
+    padding: 31px 0;
+}
+
+.detail-table__input-area {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 55%;
+    font-weight: 700;
+}
+
+
+.form-error {
+    color: #ff0000;
+    padding-top: 10px;
+}
+
+.detail-table__time {
+    font-weight: 700;
+    border: none;
+    outline: none;
+    pointer-events: none;
+    resize: none;
+    text-align: center;
+    width: 103px;
+    padding: 2px 0;
+    height: 30px;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+.detail-table__time::-webkit-calendar-picker-indicator {
+    z-index: 10;
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    width: auto;
+    height: auto;
+}
+
+.detail-table__between {
+    font-weight: 700;
+}
+
+.detail-textarea {
+    border: none;
+    padding: 8px 26px;
+    width: 55%;
+    height: 72px;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.detail-form__button {
+    width: 100%;
+    display: flex;
+    justify-content: right;
+    padding-top: 60px;
+}
+
+.detail-form__button-submit {
+    background-color: #000;
+    color: #fff;
+    width: 130px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 22px;
+    padding: 7px 0;
+}
+
+.detail-notion {
+    width: 100%;
+    display: flex;
+    justify-content: right;
+}
+
+.detail__pending {
+    color:#FF000080;
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.detail-form__approved{
+    color: #fff;
+    font-size: 22px;
+    font-weight: 700;
+    width: 130px;
+    background-color: #696969;
+    border-radius: 5px;
+    padding: 10px 0;
+}
+
+.footer-area {
+    height: 30px;
+}
+
+@media screen and (max-width:850px) {
+    .detail-form {
+        margin-top: 70px;
+    }
+
+    .content {
+        width: 85%;
+        height: 85%;
+    }
+
+    .detail-table__input-area {
+        width: 80%;
+    }
+
+    .detail-table__description-comment {
+        width: 80%;
+    }
+
+    .detail-form__button {
+        padding-top: 60px;
+    }
+}
