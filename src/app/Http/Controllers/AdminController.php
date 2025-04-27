@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Request;
 use App\Http\Requests\LoginRequest;
@@ -190,5 +191,133 @@ class AdminController extends Controller
         }, $filename, [
             'Content-Type'=>'text/csv',
         ]);
+    }
+
+    public function requestList(Request $request){
+        $tab=$request->query('tab');
+        if($tab === 'approved'){
+            $attendanceRequests=AttendanceRequest::where('approval_status', 'approved')->orderBy('user_id')->orderBy('date')->get();
+        }else{
+            $attendanceRequests=AttendanceRequest::where('approval_status', 'pending')->orderBy('user_id')->orderBy('date')->get();
+        }
+        foreach($attendanceRequests as $attendanceRequest){
+            $log=AttendanceLog::where('user_id', $attendanceRequest->user_id)->where('date', $attendanceRequest->date)->where('attendance_status', 'clock_in')->first();
+            $attendanceRequest->attendance_request_id=$log->attendance_request_id;
+        }
+        return view('admin.request_list', compact('tab', 'attendanceRequests'));
+    }
+
+    public function requestApproveView($attendanceCorrectRequest){
+        $attendanceRequest=AttendanceRequest::find($attendanceCorrectRequest);
+        $clockInLog=AttendanceLog::where('attendance_request_id', $attendanceRequest->id)->where('attendance_status', 'clock_in')->first();
+        $date=$clockInLog['date'];
+        $userId=$clockInLog['user_id'];
+        $carbonDate = Carbon::parse($date);
+        $formattedYear = $carbonDate->format('Y年');
+        $formattedDate = $carbonDate->format('n月j日');
+        $clockInTime=Carbon::parse($clockInLog['time'])->format('H:i');
+        $clockOutTime=null;
+        $breaks=[];
+
+        if($attendanceRequest->request_changes){
+            $changes=json_decode($attendanceRequest->request_changes, true);
+            if(isset($changes['clock_in'])){
+                $clockInTime=$changes['clock_in'];
+            }
+
+            if(isset($changes['clock_out'])){
+                $clockOutTime=$changes['clock_out'];
+            }
+
+            if(isset($changes['breaks'])){
+                $breaks=$changes['breaks'];
+            }
+        }
+
+        return view('admin.approve', compact('clockInLog', 'date', 'clockInTime', 'clockOutTime', 'breaks', 'formattedYear', 'formattedDate', 'attendanceRequest'));
+    }
+
+    public function requestApprove($attendanceCorrectRequest){
+        $attendanceRequest=AttendanceRequest::find($attendanceCorrectRequest);
+
+        $attendanceRequest->update([
+            'approval_status'=>'approved'
+        ]);
+
+        $changes=json_decode($attendanceRequest->request_changes, true);
+        if(isset($changes['clock_in'])  && $changes['clock_in']){
+            AttendanceLog::updateOrCreate(
+                [
+                    'user_id' => $attendanceRequest->user_id,
+                    'date' => $attendanceRequest->date,
+                    'attendance_status' => 'clock_in'
+                ],
+                [
+                    'time' => $changes['clock_in'],
+                    'attendance_request_id' => $attendanceRequest->id
+                ]
+            );
+        }
+
+        if (isset($changes['clock_out']) && $changes['clock_out']) {
+            AttendanceLog::updateOrCreate(
+                [
+                    'user_id' => $attendanceRequest->user_id,
+                    'date' => $attendanceRequest->date,
+                    'attendance_status' => 'clock_out'
+                ],
+                [
+                    'time' => $changes['clock_out'],
+                    'attendance_request_id' => $attendanceRequest->id
+                ]
+            );
+        }
+
+        if (isset($changes['breaks']) && is_array($changes['breaks'])) {
+            $existingBreakIns = AttendanceLog::where([
+                'user_id' => $attendanceRequest->user_id,
+                'date' => $attendanceRequest->date,
+                'attendance_status' => 'break_in'
+            ])->orderBy('id')->get();
+
+            $existingBreakOuts = AttendanceLog::where([
+                'user_id' => $attendanceRequest->user_id,
+                'date' => $attendanceRequest->date,
+                'attendance_status' => 'break_out'
+            ])->orderBy('id')->get();
+
+            foreach ($changes['breaks'] as $i => $break) {
+                if (isset($break['start']) && $break['start']) {
+                    AttendanceLog::updateOrCreate(
+                        [
+                            'user_id' => $attendanceRequest->user_id,
+                            'date' => $attendanceRequest->date,
+                            'attendance_status' => 'break_in',
+                            'id' => isset($existingBreakIns[$i]) ? $existingBreakIns[$i]->id : null
+                        ],
+                        [
+                            'time' => $break['start'],
+                            'attendance_request_id' => $attendanceRequest->id
+                        ]
+                    );
+                }
+
+                if (isset($break['end']) && $break['end']) {
+                    AttendanceLog::updateOrCreate(
+                        [
+                            'user_id' => $attendanceRequest->user_id,
+                            'date' => $attendanceRequest->date,
+                            'attendance_status' => 'break_out',
+                            'id' => isset($existingBreakOuts[$i]) ? $existingBreakOuts[$i]->id : null
+                        ],
+                        [
+                            'time' => $break['end'],
+                            'attendance_request_id' => $attendanceRequest->id
+                        ]
+                    );
+                }
+            }
+        }
+        return redirect()->route('correction.approve', ['attendance_correct_request'=>$attendanceCorrectRequest])->with('message', '勤怠修正の申請を承認しました');
     }
 }

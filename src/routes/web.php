@@ -30,4 +30,6 @@ Route::middleware('auth')->group(function (){
     Route::get('/attendance/{id}', [StaffController::class, 'detail'])->name('detail');
     Route::post('/attendance/{id}', [StaffController::class, 'edit'])->name('detail.edit');
     Route::patch('/admin/attendance/{id}', [AdminController::class, 'update'])->name('admin.update');
+    Route::get('/stamp_correction_request/approve/{attendance_correct_request}', [AdminController::class, 'requestApproveView'])->name('correction.approve');
+    Route::patch('/stamp_correction_request/approve/{attendance_correct_request}', [AdminController::class, 'requestApprove'])->name('correction.approve');
 });
