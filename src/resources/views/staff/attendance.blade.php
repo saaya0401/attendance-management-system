@@ -34,6 +34,7 @@
     </li>
     @endif
 @endsection
+
 @section('content')
 <form class="attendance-form" method="post">
     @csrf

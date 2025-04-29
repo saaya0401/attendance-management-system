@@ -3,7 +3,6 @@
 namespace App\Livewire;
 
 use Carbon\Carbon;
-use Illuminate\Support\Collection;
 use App\Models\User;
 use App\Models\AttendanceLog;
 use Livewire\Component;
@@ -16,6 +15,7 @@ class AdminAttendanceList extends Component
     {
         $this->selectedDay=Carbon::now()->format('Y-m-d');
     }
+
     public function render()
     {
         $selectedDay=$this->selectedDay;

@@ -3,7 +3,6 @@
 namespace App\Livewire;
 
 use Carbon\Carbon;
-use Illuminate\Support\Collection;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 use App\Models\AttendanceLog;
@@ -16,7 +15,6 @@ class AttendanceList extends Component
     {
         $this->selectedMonth = Carbon::now()->format('Y-m');
     }
-
 
     public function render()
     {

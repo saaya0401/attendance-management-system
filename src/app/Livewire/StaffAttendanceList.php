@@ -4,7 +4,6 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use Carbon\Carbon;
-use Illuminate\Support\Collection;
 use App\Models\User;
 use App\Models\AttendanceLog;
 
