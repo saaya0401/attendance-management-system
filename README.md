@@ -53,8 +53,20 @@ MAIL_FROM_ADDRESS="attendance-management-system@example.com"
 4. CREATE DATABASE demo_test;
 ```
 2. docker-compose exec php bash
+1. cp .env .env.testing
+1. .env.testingの一部を以下のように編集
+```
+APP_ENV=test
+APP_KEY=
+
+DB_DATABASE=demo_test
+DB_USERNAME=root
+DB_PASSWORD=root
+```
+5. php artisan key:generate --env=testing
 1. php artisan config:cache
 1. php artisan config:clear
+1. php artisan migrate --env=testing
 
 *php artisan test でまとめてテストするとエラーになることがあるので個別にテストしてください
 
