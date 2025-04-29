@@ -74,4 +74,8 @@ nav {
     nav {
         width: 55%;
     }
+
+    .header-nav__button {
+        font-size: 22px;
+    }
 }

@@ -68,13 +68,16 @@ class AdminController extends Controller
             }
         }
 
-        $attendanceRequest=AttendanceRequest::create([
-            'user_id'=>$userId,
-            'date'=>$date,
-            'comment'=>$comment,
-            'request_changes'=>json_encode($changes),
-            'approval_status'=>'approved'
-        ]);
+        $attendanceRequest=AttendanceRequest::updateOrCreate(
+            [
+                'user_id'=>$userId,
+                'date'=>$date
+            ],
+            [
+                'comment'=>$comment,
+                'request_changes'=>json_encode($changes),
+                'approval_status'=>'approved'
+            ]);
 
         if($changes['clock_in']){
             AttendanceLog::updateOrCreate(
