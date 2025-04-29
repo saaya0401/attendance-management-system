@@ -68,26 +68,33 @@ class StaffController extends Controller
     public function attendanceView(){
         $user=Auth::user();
         $today=Carbon::today();
-        $attendanceLog=AttendanceLog::where('user_id', $user->id)->whereDate('date', $today)->orderBy('created_at', 'desc')->first();
-        $attendanceStatus='勤務外';
         $weekdays = ['日', '月', '火', '水', '木', '金', '土'];
         $attendanceDate = $today->year . '年' . $today->month . '月' . $today->day . '日(' . $weekdays[$today->dayOfWeek] . ')';
         $attendanceTime=Carbon::now()->format('H:i');
 
-        if($attendanceLog){
-            switch($attendanceLog->attendance_status){
-                case 'clock_in':
-                    $attendanceStatus='出勤中';
-                    break;
-                case 'break_out':
-                    $attendanceStatus='出勤中';
-                    break;
-                case 'break_in':
-                    $attendanceStatus='休憩中';
-                    break;
-                case 'clock_out':
-                    $attendanceStatus='退勤済';
-                    break;
+        $todayLogs=AttendanceLog::where('user_id', $user->id)->whereDate('date', $today)->orderBy('time')->get();
+        $attendanceStatus='勤務外';
+        $attendanceLog=null;
+
+        if($todayLogs->isNotEmpty()){
+            $clockOutLog=$todayLogs->where('attendance_status', 'clock_out')->first();
+            if($clockOutLog){
+                $attendanceStatus='退勤済';
+                $attendanceLog=$clockOutLog;
+            }else{
+                $lastLog=$todayLogs->last();
+                $attendanceLog=$lastLog;
+                switch($attendanceLog->attendance_status){
+                    case 'clock_in':
+                        $attendanceStatus='出勤中';
+                        break;
+                    case 'break_out':
+                        $attendanceStatus='出勤中';
+                        break;
+                    case 'break_in':
+                        $attendanceStatus='休憩中';
+                        break;
+                }
             }
         }
         return view('staff.attendance', compact('attendanceLog','attendanceStatus', 'attendanceDate', 'attendanceTime'));
@@ -142,7 +149,7 @@ class StaffController extends Controller
             }
         }
 
-        $attendanceRequest=AttendanceRequest::where('user_id', $userId)->where('date', $date)->first();
+        $attendanceRequest=AttendanceRequest::where('user_id', $userId)->where('date', $date)->orderBy('created_at', 'desc')->first();
 
         if ($attendanceRequest) {
             $hasPendingRequest = true;
@@ -187,12 +194,15 @@ class StaffController extends Controller
             }
         }
 
-        $attendanceRequest=AttendanceRequest::create([
-            'user_id'=>$userId,
-            'date'=>$date,
-            'comment'=>$comment,
-            'request_changes'=>json_encode($changes)
-        ]);
+        $attendanceRequest=AttendanceRequest::updateOrCreate(
+            [
+                'user_id'=>$userId,
+                'date'=>$date,
+            ],
+            [
+                'comment'=>$comment,
+                'request_changes'=>json_encode($changes)
+            ]);
 
         if($changes['clock_in']){
             AttendanceLog::where([
