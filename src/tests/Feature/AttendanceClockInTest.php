@@ -66,7 +66,6 @@ class AttendanceClockInTest extends TestCase
 
         $response=$this->get('/attendance');
         $response->assertStatus(200);
-        $response = $this->get('/attendance');
 
         $this->assertTrue(
             preg_match('/<button[^>]*>出勤<\/button>/u', $response->getContent()) === 0,
@@ -74,12 +73,12 @@ class AttendanceClockInTest extends TestCase
     }
 
     public function testAdminClockIn(){
-        AttendanceLog::create([
-            'user_id'=>$this->user->id,
+        $response=$this->post('/attendance', [
             'attendance_status'=>'clock_in',
             'date'=>Carbon::today()->toDateString(),
             'time'=>'08:00:00'
         ]);
+        $response->assertRedirect('/attendance');
 
         $response=$this->post('/logout');
         $this->assertFalse(auth()->check());
