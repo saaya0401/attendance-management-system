@@ -18,11 +18,15 @@ class EmailVerifyTest extends TestCase
 
     public function testSendVerifyEmail(){
         Notification::fake();
+        $response=$this->get('/register');
+        $response->assertStatus(200);
+
         $response=$this->post('/register', [
             'name'=>'test',
             'email'=>'test@example.com',
             'password'=>'password123',
-            'password_confirmation'=>'password123'
+            'password_confirmation'=>'password123',
+            '_token' => csrf_token(),
         ]);
         $user=User::where('email', 'test@example.com')->first();
         $response->assertRedirect('/email/verify/' . $user->id);
@@ -32,11 +36,15 @@ class EmailVerifyTest extends TestCase
 
     public function testEmailVerificationRedirection(){
         Notification::fake();
+        $response=$this->get('/register');
+        $response->assertStatus(200);
+
         $response=$this->post('/register', [
             'name'=>'test',
             'email'=>'test@example.com',
             'password'=>'password123',
-            'password_confirmation'=>'password123'
+            'password_confirmation'=>'password123',
+            '_token' => csrf_token(),
         ]);
         $user=User::where('email', 'test@example.com')->first();
         $response->assertRedirect('/email/verify/' . $user->id);
@@ -49,11 +57,15 @@ class EmailVerifyTest extends TestCase
 
     public function testEmailVerificationComplete(){
         Notification::fake();
+        $response=$this->get('/register');
+        $response->assertStatus(200);
+
         $response=$this->post('/register', [
             'name'=>'test',
             'email'=>'test@example.com',
             'password'=>'password123',
-            'password_confirmation'=>'password123'
+            'password_confirmation'=>'password123',
+            '_token' => csrf_token(),
         ]);
         $user=User::where('email', 'test@example.com')->first();
         $response->assertRedirect('/email/verify/' . $user->id);

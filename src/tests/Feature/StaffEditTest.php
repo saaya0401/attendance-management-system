@@ -59,7 +59,8 @@ class StaffEditTest extends TestCase
             'date'=>$this->date,
             'clock_in'=>'18:00',
             'clock_out'=>'17:00',
-            'comment'=>'comment'
+            'comment'=>'comment',
+            '_token' => csrf_token(),
         ]);
         $response->assertRedirect();
         $response->assertSessionHasErrors([
@@ -76,7 +77,8 @@ class StaffEditTest extends TestCase
             'clock_out'=>'18:00',
             'break_in'=>['19:00'],
             'break_out'=>['20:00'],
-            'comment'=>'comment'
+            'comment'=>'comment',
+            '_token' => csrf_token(),
         ]);
         $response->assertRedirect();
         $response->assertSessionHasErrors([
@@ -93,7 +95,8 @@ class StaffEditTest extends TestCase
             'clock_out'=>'18:00',
             'break_in'=>['17:00'],
             'break_out'=>['20:00'],
-            'comment'=>'comment'
+            'comment'=>'comment',
+            '_token' => csrf_token(),
         ]);
         $response->assertRedirect();
         $response->assertSessionHasErrors([
@@ -110,7 +113,8 @@ class StaffEditTest extends TestCase
             'clock_out'=>'18:00',
             'break_in'=>['11:00'],
             'break_out'=>['12:00'],
-            'comment'=>''
+            'comment'=>'',
+            '_token' => csrf_token(),
         ]);
         $response->assertRedirect();
         $response->assertSessionHasErrors([
@@ -127,7 +131,8 @@ class StaffEditTest extends TestCase
             'clock_out'=>'18:00',
             'break_in'=>['11:00'],
             'break_out'=>['12:00'],
-            'comment'=>'comment'
+            'comment'=>'comment',
+            '_token' => csrf_token(),
         ]);
         $response->assertRedirect();
 
@@ -145,7 +150,9 @@ class StaffEditTest extends TestCase
         ];
         $this->assertEquals($expectedChanges, json_decode($attendanceRequest->request_changes, true));
 
-        $response=$this->post('/logout');
+        $response=$this->post('/logout',[
+            '_token' => csrf_token(),
+        ]);
         $this->assertFalse(auth()->check());
 
         $admin=User::where('email', 'admin@example.com')->first();
@@ -180,7 +187,8 @@ class StaffEditTest extends TestCase
             'clock_out'=>'18:00',
             'break_in'=>['11:00'],
             'break_out'=>['12:00'],
-            'comment'=>'comment'
+            'comment'=>'comment',
+            '_token' => csrf_token(),
         ]);
         $response->assertRedirect();
 
@@ -203,11 +211,14 @@ class StaffEditTest extends TestCase
             'clock_out'=>'18:00',
             'break_in'=>['11:00'],
             'break_out'=>['12:00'],
-            'comment'=>'comment'
+            'comment'=>'comment',
+            '_token' => csrf_token(),
         ]);
         $response->assertRedirect();
 
-        $response=$this->post('/logout');
+        $response=$this->post('/logout', [
+            '_token' => csrf_token(),
+        ]);
         $this->assertFalse(auth()->check());
 
         $admin=User::where('email', 'admin@example.com')->first();
@@ -216,11 +227,14 @@ class StaffEditTest extends TestCase
 
         $attendanceRequest=AttendanceRequest::where('user_id', $this->user->id)->where('date', $this->date)->first();
         $response=$this->patch('stamp_correction_request/approve/' . $attendanceRequest->id, [
-            'approval_status'=>'approved'
+            'approval_status'=>'approved',
+            '_token' => csrf_token(),
         ]);
         $response->assertRedirect();
 
-        $response=$this->post('/logout');
+        $response=$this->post('/logout', [
+            '_token' => csrf_token(),
+        ]);
         $this->assertFalse(auth()->check());
         $this->actingAs($this->user);
 
@@ -243,7 +257,8 @@ class StaffEditTest extends TestCase
             'clock_out'=>'18:00',
             'break_in'=>['11:00'],
             'break_out'=>['12:00'],
-            'comment'=>'comment'
+            'comment'=>'comment',
+            '_token' => csrf_token(),
         ]);
         $response->assertRedirect();
 

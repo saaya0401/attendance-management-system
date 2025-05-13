@@ -129,7 +129,8 @@ class AdminApproveTest extends TestCase
         $response->assertSee('/stamp_correction_request/approve/' . $this->attendanceRequest1->id);
 
         $response=$this->patch('/stamp_correction_request/approve/' . $this->attendanceRequest1->id, [
-            'approval_status'=>'approved'
+            'approval_status'=>'approved',
+            '_token'=>csrf_token(),
         ]);
         $response->assertRedirect();
 

@@ -19,7 +19,8 @@ class RegisterTest extends TestCase
             'name'=>'',
             'email'=>'test@example.com',
             'password'=>'password123',
-            'password_confirmation'=>'password123'
+            'password_confirmation'=>'password123',
+            '_token' => csrf_token(),
         ]);
         $response->assertSessionHasErrors(['name'=>'お名前を入力してください']);
     }
@@ -32,7 +33,8 @@ class RegisterTest extends TestCase
             'name'=>'test',
             'email'=>'',
             'password'=>'password123',
-            'password_confirmation'=>'password123'
+            'password_confirmation'=>'password123',
+            '_token' => csrf_token(),
         ]);
         $response->assertSessionHasErrors(['email'=>'メールアドレスを入力してください']);
     }
@@ -45,7 +47,8 @@ class RegisterTest extends TestCase
             'name'=>'test',
             'email'=>'test@example.com',
             'password'=>'passwor',
-            'password_confirmation'=>'passwor'
+            'password_confirmation'=>'passwor',
+            '_token' => csrf_token(),
         ]);
         $response->assertSessionHasErrors(['password'=>'パスワードは8文字以上で入力してください']);
     }
@@ -58,7 +61,8 @@ class RegisterTest extends TestCase
             'name'=>'test',
             'email'=>'test@example.com',
             'password'=>'password123',
-            'password_confirmation'=>'password122'
+            'password_confirmation'=>'password122',
+            '_token' => csrf_token(),
         ]);
         $response->assertSessionHasErrors(['password_confirmation'=>'パスワードと一致しません']);
     }
@@ -71,7 +75,8 @@ class RegisterTest extends TestCase
             'name'=>'test',
             'email'=>'test@example.com',
             'password'=>'',
-            'password_confirmation'=>'password122'
+            'password_confirmation'=>'password122',
+            '_token' => csrf_token(),
         ]);
         $response->assertSessionHasErrors(['password'=>'パスワードを入力してください']);
     }
@@ -84,7 +89,8 @@ class RegisterTest extends TestCase
             'name'=>'test',
             'email'=>'test@example.com',
             'password'=>'password123',
-            'password_confirmation'=>'password123'
+            'password_confirmation'=>'password123',
+            '_token' => csrf_token(),
         ]);
         $this->assertDatabaseHas('users', [
             'name'=>'test',

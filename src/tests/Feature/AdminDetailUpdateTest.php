@@ -63,7 +63,8 @@ class AdminDetailUpdateTest extends TestCase
             'date'=>$this->date,
             'clock_in'=>'18:00',
             'clock_out'=>'17:00',
-            'comment'=>'comment'
+            'comment'=>'comment',
+            '_token'=>csrf_token(),
         ]);
         $response->assertRedirect();
         $response->assertSessionHasErrors([
@@ -80,7 +81,8 @@ class AdminDetailUpdateTest extends TestCase
             'clock_out'=>'17:00',
             'break_in'=>['19:00'],
             'break_out'=>['20:00'],
-            'comment'=>'comment'
+            'comment'=>'comment',
+            '_token'=>csrf_token(),
         ]);
         $response->assertRedirect();
         $response->assertSessionHasErrors([
@@ -97,7 +99,8 @@ class AdminDetailUpdateTest extends TestCase
             'clock_out'=>'17:00',
             'break_in'=>['11:00'],
             'break_out'=>['18:00'],
-            'comment'=>'comment'
+            'comment'=>'comment',
+            '_token'=>csrf_token(),
         ]);
         $response->assertRedirect();
         $response->assertSessionHasErrors([
@@ -114,7 +117,8 @@ class AdminDetailUpdateTest extends TestCase
             'clock_out'=>'17:00',
             'break_in'=>['11:00'],
             'break_out'=>['12:00'],
-            'comment'=>''
+            'comment'=>'',
+            '_token'=>csrf_token(),
         ]);
         $response->assertRedirect();
         $response->assertSessionHasErrors([

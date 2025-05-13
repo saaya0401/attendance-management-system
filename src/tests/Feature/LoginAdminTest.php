@@ -23,7 +23,8 @@ class LoginAdminTest extends TestCase
 
         $response=$this->post('/admin/login', [
             'email'=>'',
-            'password'=>'password123'
+            'password'=>'password123',
+            '_token' => csrf_token(),
         ]);
         $response->assertSessionHasErrors(['email'=>'メールアドレスを入力してください']);
     }
@@ -40,7 +41,8 @@ class LoginAdminTest extends TestCase
 
         $response=$this->post('/admin/login', [
             'email'=>'test@example.com',
-            'password'=>''
+            'password'=>'',
+            '_token' => csrf_token(),
         ]);
         $response->assertSessionHasErrors(['password'=>'パスワードを入力してください']);
     }
@@ -49,7 +51,8 @@ class LoginAdminTest extends TestCase
         User::create([
             'name'=>'test',
             'email'=>'test@example.com',
-            'password'=>bcrypt('password123')
+            'password'=>bcrypt('password123'),
+            '_token' => csrf_token(),
         ]);
 
         $response=$this->get('/admin/login');
@@ -57,7 +60,8 @@ class LoginAdminTest extends TestCase
 
         $response=$this->post('/admin/login', [
             'email'=>'testtest@example.com',
-            'password'=>'password123'
+            'password'=>'password123',
+            '_token' => csrf_token(),
         ]);
         $response->assertSessionHasErrors(['email'=>'ログイン情報が登録されていません']);
     }

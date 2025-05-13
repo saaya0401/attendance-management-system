@@ -40,7 +40,8 @@ class AttendanceBreakTest extends TestCase
         $response=$this->post('/attendance', [
             'attendance_status'=>'break_in',
             'date'=>Carbon::today()->toDateString(),
-            'time'=>'11:00:00'
+            'time'=>'11:00:00',
+            '_token'=>csrf_token(),
         ]);
         $response->assertRedirect('/attendance');
 
@@ -70,14 +71,16 @@ class AttendanceBreakTest extends TestCase
         $response=$this->post('/attendance', [
             'attendance_status'=>'break_in',
             'date'=>Carbon::today()->toDateString(),
-            'time'=>'11:00:00'
+            'time'=>'11:00:00',
+            '_token'=>csrf_token(),
         ]);
         $response->assertRedirect('/attendance');
 
         $response=$this->post('/attendance', [
             'attendance_status'=>'break_out',
             'date'=>Carbon::today()->toDateString(),
-            'time'=>'12:00:00'
+            'time'=>'12:00:00',
+            '_token'=>csrf_token(),
         ]);
         $response->assertRedirect('/attendance');
 
@@ -102,7 +105,8 @@ class AttendanceBreakTest extends TestCase
         $response=$this->post('/attendance', [
             'attendance_status'=>'break_in',
             'date'=>Carbon::today()->toDateString(),
-            'time'=>'11:00:00'
+            'time'=>'11:00:00',
+            '_token'=>csrf_token(),
         ]);
         $response->assertRedirect('/attendance');
         $response=$this->get('/attendance');
@@ -114,7 +118,8 @@ class AttendanceBreakTest extends TestCase
         $response=$this->post('/attendance', [
             'attendance_status'=>'break_out',
             'date'=>Carbon::today()->toDateString(),
-            'time'=>'12:00:00'
+            'time'=>'12:00:00',
+            '_token'=>csrf_token(),
         ]);
         $response->assertRedirect('/attendance');
         $response=$this->get('/attendance');
@@ -136,21 +141,24 @@ class AttendanceBreakTest extends TestCase
         $response=$this->post('/attendance', [
             'attendance_status'=>'break_in',
             'date'=>Carbon::today()->toDateString(),
-            'time'=>'11:00:00'
+            'time'=>'11:00:00',
+            '_token'=>csrf_token(),
         ]);
         $response->assertRedirect('/attendance');
 
         $response=$this->post('/attendance', [
             'attendance_status'=>'break_out',
             'date'=>Carbon::today()->toDateString(),
-            'time'=>'12:00:00'
+            'time'=>'12:00:00',
+            '_token'=>csrf_token(),
         ]);
         $response->assertRedirect('/attendance');
 
         $response=$this->post('/attendance', [
             'attendance_status'=>'break_in',
             'date'=>Carbon::today()->toDateString(),
-            'time'=>'16:00:00'
+            'time'=>'16:00:00',
+            '_token'=>csrf_token(),
         ]);
         $response->assertRedirect('/attendance');
 
@@ -175,18 +183,20 @@ class AttendanceBreakTest extends TestCase
         $response=$this->post('/attendance', [
             'attendance_status'=>'break_in',
             'date'=>Carbon::today()->toDateString(),
-            'time'=>'11:00:00'
+            'time'=>'11:00:00',
+            '_token'=>csrf_token(),
         ]);
         $response->assertRedirect('/attendance');
 
         $response=$this->post('/attendance', [
             'attendance_status'=>'break_out',
             'date'=>Carbon::today()->toDateString(),
-            'time'=>'12:00:00'
+            'time'=>'12:00:00',
+            '_token'=>csrf_token(),
         ]);
         $response->assertRedirect('/attendance');
 
-        $response=$this->post('/logout');
+        $response=$this->post('/logout', ['_token'=>csrf_token()]);
         $this->assertFalse(auth()->check());
 
         $admin=User::where('email', 'admin@example.com')->first();

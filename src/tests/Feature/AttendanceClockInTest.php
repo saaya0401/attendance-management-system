@@ -33,7 +33,8 @@ class AttendanceClockInTest extends TestCase
         $response=$this->post('/attendance', [
             'attendance_status'=>'clock_in',
             'date'=>Carbon::today()->toDateString(),
-            'time'=>'08:00:00'
+            'time'=>'08:00:00',
+            '_token' => csrf_token(),
         ]);
         $response->assertRedirect('/attendance');
 
@@ -74,14 +75,20 @@ class AttendanceClockInTest extends TestCase
     }
 
     public function testAdminClockIn(){
+        $response=$this->get('/attendance');
+        $response->assertStatus(200);
+
         $response=$this->post('/attendance', [
             'attendance_status'=>'clock_in',
             'date'=>Carbon::today()->toDateString(),
-            'time'=>'08:00:00'
+            'time'=>'08:00:00',
+            '_token' => csrf_token(),
         ]);
         $response->assertRedirect('/attendance');
 
-        $response=$this->post('/logout');
+        $response=$this->post('/logout', [
+            '_token' => csrf_token(),
+        ]);
         $this->assertFalse(auth()->check());
 
         $admin=User::where('email', 'admin@example.com')->first();
