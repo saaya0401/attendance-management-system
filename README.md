@@ -57,7 +57,7 @@ MAIL_FROM_ADDRESS="attendance-management-system@example.com"
 1. .env.testingの一部を以下のように編集
 ```
 APP_ENV=test
-APP_KEY=
+APP_KEY=     *空欄にしておいてください
 
 DB_DATABASE=demo_test
 DB_USERNAME=root
@@ -67,18 +67,35 @@ DB_PASSWORD=root
 1. php artisan config:cache
 1. php artisan config:clear
 1. php artisan migrate --env=testing
+1. php artisan test
 
-*php artisan test でまとめてテストするとエラーになることがあるので個別にテストしてください
-
-5. php artisan test --filter RegisterTest
-1. php artisan test --filter LoginTest
-1. php artisan test --filter LogoutTest
-
+*php artisan test でエラーになる場合は以下のように個別にテストしてください
+```
+1. php artisan test --filter RegisterTest
+2. php artisan test --filter LoginTest
+3. php artisan test --filter LoginAdminTest
+4. php artisan test --filter AttendanceDateTest
+5. php artisan test --filter AttendanceStatusTest
+6. php artisan test --filter AttendanceClockInTest
+7. php artisan test --filter AttendanceBreakTest
+8. php artisan test --filter AttendanceClockOutTest
+9. php artisan test --filter StaffIndexTest
+10. php artisan test --filter DetailTest
+11. php artisan test --filter StaffEditTest
+12. php artisan test --filter AdminIndexTest
+13. php artisan test --filter AdminDetailUpdateTest
+14. php artisan test --filter AdminStaffListTest
+15. php artisan test --filter AdminApproveTest
+16. php artisan test --filter EmailVerifyTest
+```
 
 ## 使用技術
 - MySQL 8.0.26
 - PHP 8.2-fpm
-- Laravel 11.44.2
+- Laravel 11
+- MailHog（開発用メールサーバ）
+- phpMyAdmin
+
 
 ## URL
 - 環境開発
